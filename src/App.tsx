@@ -11,9 +11,10 @@ function App() {
   const [info, setInfo] = useState<any>();
   const [markers, setMarkers] = useState<Markers[]>([]);
   const [map, setMap] = useState<kakao.maps.Map>();
+  // map은 Map을 가리킨다. 카카오맵을 생성하고 제어하는데 사용된다.
   const [searchInputValue, setSearchInputValue] = useState("");
   const [keyword, setKeyword] = useState("");
-  console.log(setMap);
+  console.log(searchInputValue);
   useEffect(() => {
     if (!map || !keyword) return;
     const ps = new kakao.maps.services.Places();
@@ -22,8 +23,8 @@ function App() {
       // 지정된 키워드로 장소를 검색한다.
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
+        // 검색된 장소 위치를 기준으로 지도를 재설정할 범위정보를 가지고 있을
+        // LatLngBounds 객체를 생성한다.
         let marker: Markers[] = [];
         // 마커들을 담을 배열 생성
         // 좌표와 좌표에 해당한 장소 이름이 들어있다.
@@ -50,10 +51,9 @@ function App() {
   }, [map, keyword]);
 
   const handleKeyPress = (e: any) => {
-    console.log(e);
     if (e.key === "Enter") setKeyword(searchInputValue);
   };
-  //
+  // 엔터키를 눌렀을 때 키워드를 찾는다.
 
   return (
     <>
@@ -68,6 +68,7 @@ function App() {
         }}
         level={3}
         onCreate={setMap}
+        // 재설정된 좌표를 맵을 생성한다.
       >
         {markers.map((marker: any) => (
           <MapMarker
@@ -80,6 +81,7 @@ function App() {
             )}
           </MapMarker>
           // 마커들이 순회하면서 지도상에 마커들 표시한다.
+          // 클릭한 마커와 마커 배열에 있는 마커가 같으면 해당 내용을 보여준다.
         ))}
       </Map>
       <input
